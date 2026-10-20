@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, PackageCheck } from "lucide-react";
 import { requireMerchantPage } from "@/lib/auth/session";
-import { getDb } from "@/lib/db";
 import { listRedemptions } from "@/lib/domain/redemptions";
+import { loadMerchantContext } from "@/lib/data/merchant";
 import { Card, EmptyState, PageHeader } from "@/components/ui/primitives";
 import { buttonClasses } from "@/components/ui/button";
 import { ClaimProgress, ClaimStatusBadge } from "@/components/rewards/claim-status";
@@ -13,7 +13,8 @@ export const metadata = { title: "Claim history" };
 
 export default async function ClaimsPage() {
   const user = await requireMerchantPage();
-  const claims = listRedemptions(getDb(), { merchantId: user.merchantId });
+  const { db, account } = loadMerchantContext(user.merchantId);
+  const claims = listRedemptions(db, { merchantId: user.merchantId });
   const open = claims.filter((c) => ["requested", "processing", "shipped"].includes(c.status));
   const done = claims.filter((c) => !open.includes(c));
 
@@ -101,6 +102,20 @@ export default async function ClaimsPage() {
                 </ul>
               </Card>
             </section>
+          )}
+
+          {account.available > 0 && (
+            <div className="flex flex-col items-start justify-between gap-4 rounded-card border border-line bg-[linear-gradient(110deg,rgb(47_107_255/0.12),transparent_60%)] p-5 sm:flex-row sm:items-center sm:p-6">
+              <div>
+                <p className="font-semibold text-ink">Ready for your next reward?</p>
+                <p className="mt-0.5 text-sm text-ink-2">
+                  You have <span className="num font-semibold text-ink">{formatPoints(account.available)} points</span> to spend.
+                </p>
+              </div>
+              <Link href="/rewards" className={buttonClasses("primary")}>
+                Explore rewards
+              </Link>
+            </div>
           )}
         </div>
       )}

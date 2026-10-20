@@ -107,7 +107,7 @@ export function PointsPanel(props: PointsPanelProps) {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-[340px] md:max-w-none">
+        <div className="mx-auto hidden w-full max-w-[340px] sm:block md:max-w-none">
           <MembershipCard tier={tier.id} {...card} />
         </div>
       </div>

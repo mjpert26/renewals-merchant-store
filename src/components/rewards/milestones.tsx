@@ -43,7 +43,7 @@ export function MilestoneList({ milestones, layout = "grid" }: { milestones: Mil
                   </>
                 ) : (
                   <>
-                    {m.description}
+                    {m.description.replace(/\.$/, "")}
                     {m.bonusPoints > 0 && <span className="num"> · +{formatPoints(m.bonusPoints)} pts</span>}
                   </>
                 )}
