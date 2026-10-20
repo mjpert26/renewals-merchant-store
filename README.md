@@ -32,7 +32,7 @@ To start over with clean demo data: stop the server, run `npm run db:reset`, and
 ## Deploying to Vercel
 
 1. Import the repository in Vercel. The framework preset (Next.js) and build settings are detected automatically.
-2. Under Project Settings → Environment Variables, add `SESSION_SECRET` with a random value of at least 32 characters (for example, the output of `openssl rand -hex 32`). Without it, the sign-in page shows a setup message and sign-in is disabled.
+2. Under Project Settings → Environment Variables, add `SESSION_SECRET` with a random value of at least 32 characters (for example, the output of `openssl rand -hex 32` on macOS or Linux, or this PowerShell command on Windows: `$b = New-Object byte[] 32; [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); -join ($b | % { $_.ToString('x2') })`). Without it, the sign-in page shows a setup message and sign-in is disabled.
 3. Redeploy so the variable takes effect.
 
 On Vercel the demo database is created in the function's temporary directory (`/tmp`), because the rest of the filesystem is read-only. That database is seeded automatically but is **per instance and temporary**: it resets on cold starts and is not shared between concurrent instances, so claims made in one session can disappear. This is acceptable for a click-through demo. Before real use, move persistence to a hosted database.
