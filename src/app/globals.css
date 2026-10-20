@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* Big Think Rewards design tokens. Deep navy base, layered slate surfaces,
+   electric blue for primary actions, restrained gold for membership status. */
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-canvas: #060b17;
+  --color-canvas-raised: #0a1222;
+  --color-surface: #0d1628;
+  --color-surface-2: #121d33;
+  --color-surface-3: #182540;
+  --color-line: rgb(148 170 214 / 0.11);
+  --color-line-strong: rgb(148 170 214 / 0.2);
+
+  --color-ink: #f3f6fd;
+  --color-ink-2: #aab6cf;
+  --color-ink-3: #74829f;
+
+  --color-brand: #2f6bff;
+  --color-brand-hover: #4b80ff;
+  --color-brand-soft: rgb(47 107 255 / 0.14);
+  --color-brand-ink: #8fb0ff;
+
+  --color-gold: #d8b56d;
+  --color-gold-soft: rgb(216 181 109 / 0.14);
+  --color-gold-ink: #ead29c;
+
+  --color-success: #3ccf91;
+  --color-success-soft: rgb(60 207 145 / 0.13);
+  --color-warn: #f2b84b;
+  --color-warn-soft: rgb(242 184 75 / 0.13);
+  --color-danger: #f47174;
+  --color-danger-soft: rgb(244 113 116 / 0.13);
+
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 20px 40px -24px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 30px 60px -20px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(148 170 214 / 0.14);
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: -400px 0;
+    }
+    to {
+      background-position: 400px 0;
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-canvas);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 75% -10%, rgb(47 107 255 / 0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgb(47 107 255 / 0.05), transparent 60%),
+    var(--color-canvas);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: rgb(47 107 255 / 0.45);
+  color: white;
+}
+
+/* Visible, consistent keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--color-brand-ink);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-surface-2) 0, var(--color-surface-3) 40%, var(--color-surface-2) 80%);
+  background-size: 800px 100%;
+  animation: var(--animate-shimmer);
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
