@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.check.json",
     "test": "vitest run",
     "db:reset": "tsx scripts/reset-db.ts",
     "e2e": "tsx scripts/e2e.ts",

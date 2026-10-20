@@ -168,7 +168,7 @@ export function RedeemPanel({ reward, availability, available, pending, lifetime
         </fieldset>
       ) : (
         <div className="flex items-baseline justify-between">
-          <p className="text-[13px] font-medium text-ink-2">{variant.label}</p>
+          <p className="text-[13px] font-medium text-ink-2">Price</p>
           <p className="num text-2xl font-bold tracking-[-0.02em] text-ink">
             {formatPoints(variant.pointsCost)} <span className="text-sm font-medium text-ink-3">pts</span>
           </p>
@@ -242,7 +242,7 @@ export function RedeemPanel({ reward, availability, available, pending, lifetime
 
           {reward.deliveryMethod === "shipped" && (
             <fieldset className="space-y-3">
-              <legend className="mb-1 text-[13px] font-medium text-ink-2">Ship to</legend>
+              <legend className="mb-1 w-full border-t border-line pt-4 text-xs font-semibold uppercase tracking-[0.12em] text-ink-3">Ship to</legend>
               <Field label="Recipient" htmlFor="redeem-recipient" error={errors.recipient}>
                 <Input id="redeem-recipient" autoComplete="name" value={address.recipient} onChange={(e) => setAddress({ ...address, recipient: e.target.value })} aria-invalid={!!errors.recipient || undefined} />
               </Field>

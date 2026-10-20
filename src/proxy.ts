@@ -5,7 +5,13 @@ import { SESSION_COOKIE, verifyToken } from "@/lib/auth/token";
 // Role checks and authorization are enforced again in every page, Server
 // Function and Route Handler via src/lib/auth/session.ts.
 export function proxy(request: NextRequest) {
-  const session = verifyToken(request.cookies.get(SESSION_COOKIE)?.value);
+  let session = null;
+  try {
+    session = verifyToken(request.cookies.get(SESSION_COOKIE)?.value);
+  } catch (error) {
+    // Misconfiguration (e.g. missing SESSION_SECRET): fail closed as signed out.
+    console.error(error);
+  }
   if (!session) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

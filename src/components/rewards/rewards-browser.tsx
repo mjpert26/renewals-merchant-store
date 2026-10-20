@@ -116,19 +116,21 @@ export function RewardsBrowser({ items, available }: { items: Item[]; available:
               </button>
             )}
           </div>
-          <div className="flex items-center gap-3">
-            <label className="flex h-11 flex-1 cursor-pointer items-center gap-3 rounded-control border border-line-strong bg-canvas-raised px-3.5 md:flex-none">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <label className="flex h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-control border border-line-strong bg-canvas-raised px-3 sm:gap-3 sm:px-3.5 md:flex-none">
               <Switch
                 id="affordable"
                 checked={affordable}
                 onCheckedChange={(v) => update({ affordable: v ? "1" : null })}
                 aria-label="Only show rewards I can afford"
               />
-              <span className="whitespace-nowrap text-sm text-ink-2">
-                Affordable with my points <span className="num text-ink-3">({affordableCount})</span>
+              <span className="truncate whitespace-nowrap text-sm text-ink-2">
+                <span className="sm:hidden">Affordable</span>
+                <span className="hidden sm:inline">Affordable with my points</span>{" "}
+                <span className="num text-ink-3">({affordableCount})</span>
               </span>
             </label>
-            <div className="w-44 shrink-0">
+            <div className="w-[148px] shrink-0 sm:w-44">
               <label htmlFor="sort" className="sr-only">
                 Sort rewards
               </label>

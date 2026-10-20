@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
 import { Check, Copy, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { submitReferralAction } from "@/app/actions/merchant";
@@ -8,11 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Checkbox, Field, Input } from "@/components/ui/form";
 import { Notice } from "@/components/ui/primitives";
 
+const noopSubscribe = () => () => {};
+
 export function ReferralLink({ link, code }: { link: string; code: string }) {
   const [copied, setCopied] = useState(false);
-  const [canShare, setCanShare] = useState(false);
-  // Read after hydration so server and client markup match.
-  useEffect(() => setCanShare("share" in navigator), []);
+  // false on the server, real value after hydration, without a mismatch.
+  const canShare = useSyncExternalStore(
+    noopSubscribe,
+    () => "share" in navigator,
+    () => false,
+  );
 
   async function copy() {
     try {

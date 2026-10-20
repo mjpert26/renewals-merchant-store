@@ -16,7 +16,7 @@ import { AnniversaryNotice } from "@/components/rewards/anniversary-notice";
 import { Card, SectionHeader, Badge, EmptyState } from "@/components/ui/primitives";
 import { buttonClasses } from "@/components/ui/button";
 import AnimatedContent from "@/components/reactbits/AnimatedContent";
-import { formatDate, formatPoints } from "@/lib/utils";
+import { formatDate, formatPoints, isWithinDays } from "@/lib/utils";
 
 export const metadata = { title: "Overview" };
 
@@ -49,7 +49,7 @@ export default async function OverviewPage() {
   const anniversary = milestones.find((m) => m.code === "anniversary_1" && m.achievedAt);
   const showAnniversary =
     anniversary &&
-    Date.now() - new Date(anniversary.achievedAt!).getTime() < 90 * 86_400_000 &&
+    isWithinDays(anniversary.achievedAt!, 90) &&
     !isDismissed(db, merchant.id, "anniversary_1");
 
   const pendingFunding = ledger.find((e) => e.type === "earn_pending");

@@ -142,6 +142,14 @@ function backdate(db: DB, redemptionId: string, at: string, opts: { created?: bo
   }
 }
 
+function backdateReferral(db: DB, referralId: string, at: string) {
+  db.prepare("UPDATE referrals SET created_at = ?, updated_at = ? WHERE id = ?").run(at, at, referralId);
+  db.prepare("UPDATE audit_log SET created_at = ? WHERE entity_type = 'referral' AND entity_id = ? AND action = 'referral.submit'").run(
+    at,
+    referralId,
+  );
+}
+
 function redeem(
   db: DB,
   merchantId: string,
@@ -225,11 +233,7 @@ export function seedDemoData(db: DB) {
       { businessName: "Palmetto Print Shop", ownerName: "Dana Whitaker", contact: "(843) 555-0177", consent: true },
       jordan,
     );
-    db.prepare("UPDATE referrals SET created_at = ?, updated_at = ? WHERE id = ?").run(
-      "2026-06-02T16:00:00.000Z",
-      "2026-06-02T16:00:00.000Z",
-      ref.id,
-    );
+    backdateReferral(db, ref.id, "2026-06-02T16:00:00.000Z");
     updateReferralStatus(db, ref.id, "funded", ALYSSA, "2026-07-22T15:30:00.000Z");
     awardMilestone(db, "mer_coastal", "anniversary_1", settings, "2026-08-12T15:00:00.000Z");
     redeem(
@@ -262,11 +266,8 @@ export function seedDemoData(db: DB) {
       { businessName: "Marsh Hen Coffee Roasters", ownerName: "Eli Brooks", contact: "eli@marshhencoffee.com", consent: true },
       jordan,
     );
-    db.prepare("UPDATE referrals SET status = 'in_review', created_at = ?, updated_at = ? WHERE id = ?").run(
-      "2026-10-06T14:00:00.000Z",
-      "2026-10-09T15:00:00.000Z",
-      ref2.id,
-    );
+    backdateReferral(db, ref2.id, "2026-10-06T14:00:00.000Z");
+    db.prepare("UPDATE referrals SET status = 'in_review', updated_at = ? WHERE id = ?").run("2026-10-09T15:00:00.000Z", ref2.id);
 
     // ---- Harbor Light Bakery ----
     const priya: Actor = { id: "usr_priya", name: "Priya Natarajan" };

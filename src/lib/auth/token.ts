@@ -18,7 +18,8 @@ const DEV_FALLBACK_SECRET = "demo-only-secret-change-me-before-any-real-deployme
 export function sessionSecret(): string {
   const secret = process.env.SESSION_SECRET;
   if (secret && secret.length >= 32) return secret;
-  if (process.env.NODE_ENV === "production" && process.env.DEMO_MODE !== "true") {
+  if (process.env.NODE_ENV === "production") {
+    // Never sign production sessions with a well-known key, demo mode or not.
     throw new Error("SESSION_SECRET (32+ characters) is required in production.");
   }
   return DEV_FALLBACK_SECRET;
