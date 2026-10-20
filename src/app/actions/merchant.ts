@@ -8,9 +8,12 @@ import { redeemReward, submitToFulfillment } from "@/lib/domain/redemptions";
 import { submitReferral, savePreferences, requestCallback, dismiss } from "@/lib/domain/engagement";
 import { toActionError, type ActionResult, DomainError } from "@/lib/domain/errors";
 import { isDemoMode } from "@/lib/env";
+import { sessionConfigError } from "@/lib/auth/token";
 
 export async function signInAsDemoUser(userId: string): Promise<ActionResult> {
   if (!isDemoMode()) return { ok: false, code: "forbidden", error: "Demo sign-in is disabled." };
+  const configError = sessionConfigError();
+  if (configError) return { ok: false, code: "unexpected", error: configError };
   try {
     await startSession(userId);
   } catch (error) {

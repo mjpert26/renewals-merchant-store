@@ -5,11 +5,13 @@ import { getMerchantSummary } from "@/lib/domain/merchants";
 import { BrandLockup } from "@/components/brand";
 import { isDemoMode } from "@/lib/env";
 import { PersonaButton } from "./persona-button";
+import { sessionConfigError } from "@/lib/auth/token";
 
 export const metadata = { title: "Sign in" };
 
 export default async function LoginPage() {
   const demo = isDemoMode();
+  const configError = sessionConfigError();
   const current = await getCurrentUser();
   const users = demo ? listDemoUsers() : [];
   const db = getDb();
@@ -48,6 +50,11 @@ export default async function LoginPage() {
         <div className="w-full max-w-md">
           <BrandLockup subtitle="Client Rewards" className="mb-10 lg:hidden" />
           <h2 className="text-2xl font-semibold tracking-[-0.02em] text-ink">Sign in to the demo</h2>
+          {configError && (
+            <p role="alert" className="mt-4 rounded-xl border border-[rgb(244_113_116/0.3)] bg-danger-soft px-4 py-3 text-sm text-ink-2">
+              <span className="font-semibold text-danger">Setup needed.</span> {configError}
+            </p>
+          )}
           {demo ? (
             <>
               <p className="mt-2 text-sm leading-relaxed text-ink-2">

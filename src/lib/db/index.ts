@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { SCHEMA_SQL, SCHEMA_VERSION } from "./schema";
@@ -10,7 +11,12 @@ export type DB = Database.Database;
 const globalForDb = globalThis as unknown as { __rewardsDb?: DB };
 
 export function dbPath(): string {
-  return process.env.REWARDS_DB_PATH ?? path.join(process.cwd(), "data", "rewards.db");
+  if (process.env.REWARDS_DB_PATH) return process.env.REWARDS_DB_PATH;
+  // Serverless hosts such as Vercel only allow writes under the OS temp
+  // directory. The demo database there is per instance and resets on cold
+  // starts; use a hosted database for anything that must persist.
+  if (process.env.VERCEL) return path.join(os.tmpdir(), "rewards.db");
+  return path.join(process.cwd(), "data", "rewards.db");
 }
 
 /** Opens (and if needed creates, migrates and seeds) a database at the given path. */

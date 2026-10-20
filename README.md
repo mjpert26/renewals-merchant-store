@@ -29,6 +29,14 @@ The sign-in page lists every demo account; no password is needed.
 
 To start over with clean demo data: stop the server, run `npm run db:reset`, and start it again.
 
+## Deploying to Vercel
+
+1. Import the repository in Vercel. The framework preset (Next.js) and build settings are detected automatically.
+2. Under Project Settings → Environment Variables, add `SESSION_SECRET` with a random value of at least 32 characters (for example, the output of `openssl rand -hex 32`). Without it, the sign-in page shows a setup message and sign-in is disabled.
+3. Redeploy so the variable takes effect.
+
+On Vercel the demo database is created in the function's temporary directory (`/tmp`), because the rest of the filesystem is read-only. That database is seeded automatically but is **per instance and temporary**: it resets on cold starts and is not shared between concurrent instances, so claims made in one session can disappear. This is acceptable for a click-through demo. Before real use, move persistence to a hosted database.
+
 ## Scripts
 
 | Command | Purpose |
@@ -50,7 +58,7 @@ See `.env.example`. None are needed for local development.
 | --- | --- | --- |
 | `SESSION_SECRET` | Development-only fallback | Required in production, 32+ characters |
 | `DEMO_MODE` | `true` | `false` disables persona sign-in and simulated funding |
-| `REWARDS_DB_PATH` | `data/rewards.db` | SQLite file location |
+| `REWARDS_DB_PATH` | `data/rewards.db` (`/tmp/rewards.db` on Vercel) | SQLite file location |
 | `FUNDING_WEBHOOK_SECRET` | unset | Enables the funding integration endpoints |
 
 ## What is implemented

@@ -15,6 +15,15 @@ export interface SessionPayload {
 
 const DEV_FALLBACK_SECRET = "demo-only-secret-change-me-before-any-real-deployment";
 
+/** Explains a missing production secret, or returns null when sessions can be signed. */
+export function sessionConfigError(): string | null {
+  const secret = process.env.SESSION_SECRET;
+  if (process.env.NODE_ENV === "production" && !(secret && secret.length >= 32)) {
+    return "SESSION_SECRET is not set. Add a random value of at least 32 characters to the environment variables and redeploy.";
+  }
+  return null;
+}
+
 export function sessionSecret(): string {
   const secret = process.env.SESSION_SECRET;
   if (secret && secret.length >= 32) return secret;
